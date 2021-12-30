@@ -5,10 +5,10 @@ const Item = ({item}) => {
     const [isHovering, setIsHovering] = useState()
 
     return (
-        <div className={`LmpjrdduO8${isHovering ? " hovering" : ""}`} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+        <div className={`LmpjrdduO8${isHovering ? " hovering" : ""}`}>
             <Link to={item.link} className="img-50 icon cursor-pointer" style={{
                 backgroundColor: "var(--bg-color-3)"
-            }}>
+            }} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
                 <i className={item.icon} style={{
                     color: "var(--green)"
                 }}></i>
