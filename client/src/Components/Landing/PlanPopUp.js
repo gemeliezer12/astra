@@ -1,10 +1,7 @@
 import { useState } from "react"
-import { useEffect } from "react"
-import CreditCardInput from 'react-credit-card-input'
 import axios from "axios"
 import { firebase } from "../../firebase"
 import { usePopUp } from "../Contexts/PopUpContext"
-import { useAuth } from "../Contexts/AuthContext"
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
 
 const CARD_OPTIONS = {
@@ -49,14 +46,16 @@ const PlanPopUp = ({ id, plan }) => {
         if(!error) {
             try {
                 const {id} = paymentMethod
-                const res = await axios.post("http://localhost:4000/payment", {
-                    amount: 5,
+                const res = await axios.post("http://localhost:5000/payment", {
+                    amount: 1000,
                     id
                 })
+
+                console.log(res);
                 
-                if (res.data.success) {
-                    setSuccsess(true)
-                }
+                // if (res.data.success) {
+                //     setSuccsess(true)
+                // }
             } catch (error) {
                 console.log("Error", error)
             }
