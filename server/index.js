@@ -28,17 +28,6 @@ app.post("/payment", cors(), async (req, res) => {
         items: [{plan: "price_1KDH7rFDnhpXIbbkOWS7b0gF"}],
         expand: ["latest_invoice.payment_intent"]
     })
-    
-    console.log("subscription", subscription)
-    const status = subscription["latest_invoice"]["payment_status"]["status"]
-    const client_secret = subscription["latest_invoice"]["payment_intent"]["client_secret"]
-    console.log("status", status)
-    console.log("client_secret", client_secret)
-
-    res.json({
-        client_secret: client_secret,
-        status: status
-    })
 })
 
 const PORT = process.env.PORT || 5000

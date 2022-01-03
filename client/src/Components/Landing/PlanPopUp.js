@@ -47,26 +47,10 @@ const PlanPopUp = ({ id, plan }) => {
 
         if (!error) {
             try {
-                const res = await axios.post("http://localhost:5000/payment", {
+                await axios.post("http://localhost:5000/payment", {
                     payment_method: paymentMethod.id,
                     email: auth.currentUser.email
                 })
-
-                const { client_secret, status } = res.data
-
-                if (status === "requires_action") {
-                    stripe.confirmCardPayment(client_secret).then((res) => {
-                        if (res.error) {
-                            console.log(error)
-                        }
-                        else {
-                            console.log("You got the money")
-                        }
-                    })
-                }
-                else {
-                    console.log("You got the money")
-                }
             }
             catch (err) {
                 console.log("Error", err)
@@ -76,37 +60,6 @@ const PlanPopUp = ({ id, plan }) => {
             console.log("Error", error);
         }
     }
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault()
-
-    //     if (!stripe || !elements) {
-    //         return
-    //     }
-
-    //     const {error, paymentMethod} = await stripe.createPaymentMethod({
-    //         type: "card",
-    //         card: elements.getElement(CardElement),
-    //     })
-    //     if(!error) {
-    //         try {
-    //             const {id} = paymentMethod
-    //             const res = await axios.post("http://localhost:5000/payment", {
-    //                 amount: 1000,
-    //                 id
-    //             })
-
-    //             console.log(res);
-                
-    //             // if (res.data.success) {
-    //             //     setSuccsess(true)
-    //             // }
-    //         } catch (error) {
-    //             console.log("Error", error)
-    //         }
-    //     } else {
-    //         console.log(error.message)
-    //     }   
-    // }
 
     return (
         <>
