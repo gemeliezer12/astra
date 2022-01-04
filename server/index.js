@@ -18,6 +18,8 @@ const path = require("path")
 //When you navigate to the root page, it would use the built react-app
 app.use(express.static(path.resolve(__dirname, "./client/build")));
 
+// How to deploy a node-express and create-react-app on Heroku? The front-end and back-end are in separate folder and also have the git setup outside of those 2 folder.
+
 app.post("/payment", cors(), async (req, res) => {
     // let {amount, id} = req.body
     const { email, payment_method } = req.body
