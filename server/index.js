@@ -5,6 +5,7 @@ require("dotenv").config()
 const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST)
 const bodyParser = require("body-parser")
 const cors = require("cors")
+const port = process.env.PORT || 5000
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
@@ -30,8 +31,13 @@ app.post("/payment", cors(), async (req, res) => {
     })
 })
 
-const PORT = process.env.PORT || 5000
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static("build"))
+//     app.get("*", (req, res) => {
+//         req.sendFile(path.resolve(__dirname, "build", "index.html"))
+//     })
+// }
 
-app.listen(process.env.PORT || 5000, () => {
-    console.log(`Server is listening on ${PORT}`)
+app.listen(port, () => {
+    console.log(`Server is listening on ${port}`)
 })
