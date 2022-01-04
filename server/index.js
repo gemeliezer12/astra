@@ -18,9 +18,9 @@ const path = require("path")
 //When you navigate to the root page, it would use the built react-app
 app.use(express.static(path.resolve(__dirname, "./client/build")));
 
-// How to deploy a node-express and create-react-app on Heroku? The front-end and back-end are in separate folder and also have the git setup outside of those 2 folder.
+// How to deploy a node-express and create-react-app on Heroku? The front-end and back-end are in separate folder and also have the git setup outside of those 2 folder. ! [remote rejected] main -> main (pre-receive hook declined) error: failed to push some refs to 'https://git.heroku.com/
 
-app.post("/payment", cors(), async (req, res) => {
+app.post("/payment", cors(), async (req) => {
     // let {amount, id} = req.body
     const { email, payment_method } = req.body
 
@@ -32,19 +32,12 @@ app.post("/payment", cors(), async (req, res) => {
         }
     })
 
-    const subscription = await stripe.subscriptions.create({
+    stripe.subscriptions.create({
         customer: customer.id,
         items: [{plan: "price_1KDH7rFDnhpXIbbkOWS7b0gF"}],
         expand: ["latest_invoice.payment_intent"]
     })
 })
-
-// if (process.env.NODE_ENV === "production") {
-//     app.use(express.static("build"))
-//     app.get("*", (req, res) => {
-//         req.sendFile(path.resolve(__dirname, "build", "index.html"))
-//     })
-// }
 
 app.listen(port, () => {
     console.log(`Server is listening on ${port}`)
