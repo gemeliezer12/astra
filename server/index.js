@@ -12,6 +12,12 @@ app.use(bodyParser.json())
 
 app.use(cors())
 
+const path = require("path")
+
+//This will create a middleware.
+//When you navigate to the root page, it would use the built react-app
+app.use(express.static(path.resolve(__dirname, "./client/build")));
+
 app.post("/payment", cors(), async (req, res) => {
     // let {amount, id} = req.body
     const { email, payment_method } = req.body
