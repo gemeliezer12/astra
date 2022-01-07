@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 import { firebase } from "../../firebase"
 import { usePopUp } from "../Contexts/PopUpContext"
+import { useAuth } from "../Contexts/AuthContext"
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
 
 const CARD_OPTIONS = {
@@ -23,9 +24,11 @@ const CARD_OPTIONS = {
 }
 
 const auth = firebase.auth()
+const db = firebase.firestore()
 
 const PlanPopUp = ({ id, plan }) => {
     const { setPopUpContent } = usePopUp()
+    const { selfUser } = useAuth()
     const [success, setSuccsess] = useState(false)
     const stripe = useStripe()
     const elements = useElements()
@@ -44,6 +47,8 @@ const PlanPopUp = ({ id, plan }) => {
             card: elements.getElement(CardElement),
             billing_details: auth.currentUser.email
         })
+
+        console.log((await db.collection("users").doc(selfUser.id).get()))
 
         if (!error) {
             try {

@@ -1,19 +1,8 @@
 const express = require("express")
 const app = express()
-const firebase = require("firebase/compat/app")
-require("firebase/compat/firestore")
-require("firebase/compat/auth")
 require("dotenv").config()
-
-firebase.initializeApp({
-    apiKey: "AIzaSyDabmXRJ7rUXxnEuUErFNffOcl--2l5UpM",
-    authDomain: "fitness-and-health-c6be2.firebaseapp.com",
-    projectId: "fitness-and-health-c6be2",
-    storageBucket: "fitness-and-health-c6be2.appspot.com",
-    messagingSenderId: "461280175195",
-    appId: "1:461280175195:web:db6a70bc1a4a343c36cb7e",
-    measurementId: "${config.measurementId}"
-})
+const { firebase } = require("./firebase")
+const db = firebase.firestore()
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST)
 const bodyParser = require("body-parser")
@@ -25,7 +14,7 @@ app.use(bodyParser.json())
 
 app.use(cors())
 
-app.post("/payment", cors(), async (req) => {
+app.post("/payment", cors(), async req => {
     const { email, payment_method } = req.body
 
     const customer = await stripe.customers.create({
@@ -35,6 +24,8 @@ app.post("/payment", cors(), async (req) => {
             default_payment_method: payment_method
         }
     })
+
+    console.log(await db.collection("users").get().docs)
 
     stripe.subscriptions.create({
         customer: customer.id,

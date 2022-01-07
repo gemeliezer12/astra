@@ -12,4 +12,4 @@ firebase.initializeApp({
     measurementId: "${config.measurementId}"
 })
 
-export { firebase }
+module.exports = { firebase }
