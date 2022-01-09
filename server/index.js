@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 app.use(cors())
 
-app.post("/payment", cors(), async req => {
+app.post("/payment", cors(), async (req, res) => {
     const { email, payment_method } = req.body
 
     const customer = await stripe.customers.create({
@@ -25,12 +25,20 @@ app.post("/payment", cors(), async req => {
         }
     })
 
-    console.log(await db.collection("users").get().docs)
-
-    stripe.subscriptions.create({
+    const subscription = await stripe.subscriptions.create({
         customer: customer.id,
         items: [{plan: "price_1KDH7rFDnhpXIbbkOWS7b0gF"}],
         expand: ["latest_invoice.payment_intent"]
+    })
+
+    res.json({
+        customer: customer,
+        subscription: subscription
+    })
+
+    console.log({
+        customer: customer,
+        subscription: subscription
     })
 })
 

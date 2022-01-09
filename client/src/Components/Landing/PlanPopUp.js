@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import { firebase } from "../../firebase"
 import { usePopUp } from "../Contexts/PopUpContext"
@@ -28,12 +28,9 @@ const db = firebase.firestore()
 
 const PlanPopUp = ({ id, plan }) => {
     const { setPopUpContent } = usePopUp()
-    const { selfUser } = useAuth()
     const [success, setSuccsess] = useState(false)
     const stripe = useStripe()
     const elements = useElements()
-    
-    
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -41,29 +38,25 @@ const PlanPopUp = ({ id, plan }) => {
         if (!stripe || !elements) {
             return
         }
-        
+
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: "card",
             card: elements.getElement(CardElement),
             billing_details: auth.currentUser.email
         })
 
-        console.log((await db.collection("users").doc(selfUser.id).get()))
-
-        if (!error) {
-            try {
-                await axios.post("http://localhost:5000/payment", {
-                    payment_method: paymentMethod.id,
-                    email: auth.currentUser.email
-                })
-            }
-            catch (err) {
-                console.log("Error", err)
-            }
-        }
-        else {
-            console.log("Error", error);
-        }
+        console.log(paymentMethod)
+        // if (!error) {
+        //     console.log(
+        //         (await axios.post("http://localhost:5000/payment", {
+        //             payment_method: paymentMethod.id,
+        //             email: auth.currentUser.email
+        //         })).data
+        //     )
+        // }
+        // else {
+        //     console.log("Error", error);
+        // }
     }
 
     return (
